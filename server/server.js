@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const { connectDB } = require("./db/connect");
+
+const RouteNotFound = require("./middleware/route-not-found");
+const { ErrorHandlingMiddleware } = require("./middleware/error-handling");
+
 const AuthRouter = require("./routes/auth.route");
 
 app.use(cors());
@@ -18,6 +22,9 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/auth", AuthRouter);
+
+app.use(RouteNotFound);
+app.use(ErrorHandlingMiddleware);
 
 const start = async () => {
   try {
