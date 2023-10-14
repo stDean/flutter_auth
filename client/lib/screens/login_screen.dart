@@ -1,5 +1,7 @@
+import 'package:client/component/login_options.dart';
 import 'package:client/component/my_button.dart';
 import 'package:client/component/text_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
-            top: 40.0,
+            top: 50.0,
             left: 30,
             right: 30,
             // bottom: 10,
@@ -42,12 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Lock Logo
                   Image.asset(
                     'lib/images/lock-icon.png',
-                    width: 90,
+                    width: 65,
                     color: Colors.grey.shade800,
                   ),
 
                   // Welcome text
-                  const SizedBox(height: 70),
+                  const SizedBox(height: 60),
                   Text(
                     'Welcome back, you\'ve been missed.',
                     style: TextStyle(
@@ -78,26 +80,93 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
 
                   // forget text
-                  const Align(
+                  Align(
                     alignment: Alignment.centerRight,
-                    child: Text('Forget Password?'),
+                    child: Text(
+                      'Forget Password?',
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
 
                   // button
                   MyButton(
                     buttonText: 'Sign In',
                     onTap: signIn,
-                  )
+                  ),
+
+                  const SizedBox(height: 45),
+
                   // or text
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 7,
+                        ),
+                        child: Text(
+                          "Or Continue With",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ],
+                  ),
 
                   // google and apple button
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      LoginOption(imgPath: "lib/images/google.png"),
+                      LoginOption(imgPath: "lib/images/apLo.png"),
+                    ],
+                  ),
+
+                  const SizedBox(height: 40),
 
                   // register text
+                  Text.rich(
+                    TextSpan(
+                      text: "Not a Member? ",
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 16,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Register Now',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            
+                          },
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
