@@ -12,9 +12,7 @@ class LoginOption extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: imgPath == "lib/images/apLo.png"
-          ? const EdgeInsets.all(10)
-          : const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.only(
         top: 40,
         left: 10,
@@ -22,7 +20,8 @@ class LoginOption extends StatelessWidget {
       ),
       child: Image.asset(
         imgPath,
-        width: imgPath == "lib/images/apLo.png" ? 45 : 40,
+        // change to height
+        height: 50,
       ),
     );
   }

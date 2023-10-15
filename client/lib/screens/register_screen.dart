@@ -1,25 +1,23 @@
 import 'package:client/component/login_options.dart';
 import 'package:client/component/my_button.dart';
 import 'package:client/component/text_field.dart';
-import 'package:client/screens/register_screen.dart';
+import 'package:client/screens/login_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  void signIn() {
+  void register() {
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Processing Data')),
       );
@@ -53,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Welcome text
                   const SizedBox(height: 60),
                   Text(
-                    'Welcome back, you\'ve been missed.',
+                    'Welcome to Our App!!.',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontSize: 16,
@@ -74,6 +72,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 20),
                         MyTextField(
+                          hintText: 'email',
+                          obscureText: false,
+                          errMsg: "email address is required",
+                        ),
+                        SizedBox(height: 20),
+                        MyTextField(
                           hintText: 'password',
                           obscureText: true,
                           errMsg: "password is required",
@@ -82,81 +86,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
-
-                  // forget text
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Forget Password?',
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
 
                   // button
                   MyButton(
-                    buttonText: 'Sign In',
-                    onTap: signIn,
+                    buttonText: 'Register',
+                    onTap: register,
                   ),
 
-                  const SizedBox(height: 45),
-
-                  // or text
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 7,
-                        ),
-                        child: Text(
-                          "Or Continue With",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: Colors.grey.shade400,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // google and apple button
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      LoginOption(imgPath: "lib/images/google.png"),
-                      LoginOption(imgPath: "lib/images/apLo.png"),
-                    ],
-                  ),
-
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 160),
 
                   // register text
                   Text.rich(
                     TextSpan(
-                      text: "Not a Member? ",
+                      text: "Have an account? ",
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontSize: 16,
                       ),
                       children: [
                         TextSpan(
-                          text: 'Register Now',
+                          text: 'Login Now',
                           style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -166,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ..onTap = () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen(),
+                                  builder: (context) => const LoginScreen(),
                                 ),
                               );
                             },
