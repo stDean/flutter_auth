@@ -6,12 +6,12 @@ const AuthCtrl = {
   register: async (req, res) => {
     // console.log({ ...req.body });
     const user = await User.create({ ...req.body });
-    const { username } = user;
+    const { username: userName } = user;
 
     const token = user.createJWT();
     res
-      .status(StatusCodes.OK)
-      .json({ msg: "You Have Successfully Registered", username, token });
+      .status(StatusCodes.CREATED)
+      .json({ msg: "You Have Successfully Registered", userName, token });
   },
   login: async (req, res) => {
     const { username, password } = req.body;

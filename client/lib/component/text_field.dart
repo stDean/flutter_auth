@@ -6,15 +6,18 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     required this.errMsg,
+    required this.controller,
   });
 
   final String hintText;
   final bool obscureText;
   final String errMsg;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return errMsg;

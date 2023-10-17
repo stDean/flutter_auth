@@ -1,7 +1,9 @@
-import 'package:client/component/login_options.dart';
 import 'package:client/component/my_button.dart';
 import 'package:client/component/text_field.dart';
 import 'package:client/screens/login_screen.dart';
+import 'package:client/services/service.dart';
+import 'package:client/services/storage.dart';
+import 'package:client/services/user_res.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +16,60 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _username;
+  late final TextEditingController _email;
+  late final TextEditingController _password;
 
-  void register() {
+  User? _user;
+
+  @override
+  void initState() {
+    _username = TextEditingController();
+    _email = TextEditingController();
+    _password = TextEditingController();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  void displayDialog(
+    BuildContext context,
+    String title,
+    String text,
+  ) =>
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(text),
+        ),
+      );
+
+  void register() async {
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
+      _user = await Service().registerUser(
+        _username.text,
+        _email.text,
+        _password.text,
       );
     }
+
+    if (_user != null) {
+      SecureStorage().writeSecureData('token', _user!.token);
+    }
+
+    print(_user);
+    // print(_user!.token);
+    // print(_user!.msg);
+    // print(_user!.username);
   }
 
   @override
@@ -34,7 +82,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             top: 50.0,
             left: 30,
             right: 30,
-            // bottom: 10,
           ),
           child: SingleChildScrollView(
             child: Center(
@@ -63,21 +110,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // form field
                   Form(
                     key: _formKey,
-                    child: const Column(
+                    child: Column(
                       children: [
                         MyTextField(
+                          controller: _username,
                           hintText: 'username',
                           obscureText: false,
                           errMsg: "username is required",
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         MyTextField(
+                          controller: _email,
                           hintText: 'email',
                           obscureText: false,
                           errMsg: "email address is required",
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         MyTextField(
+                          controller: _password,
                           hintText: 'password',
                           obscureText: true,
                           errMsg: "password is required",
@@ -94,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: register,
                   ),
 
-                  const SizedBox(height: 160),
+                  const SizedBox(height: 140),
 
                   // register text
                   Text.rich(
@@ -123,7 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+
+                  const SizedBox(height: 15)
                 ],
               ),
             ),

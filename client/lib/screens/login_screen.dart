@@ -14,6 +14,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _username;
+  late final TextEditingController _password;
+
+  @override
+  void initState() {
+    _username = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _password.dispose();
+    super.dispose();
+  }
 
   void signIn() {
     // Validate returns true if the form is valid, or false otherwise.
@@ -36,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
             top: 50.0,
             left: 30,
             right: 30,
-            // bottom: 10,
           ),
           child: SingleChildScrollView(
             child: Center(
@@ -65,15 +80,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   // form field
                   Form(
                     key: _formKey,
-                    child: const Column(
+                    child: Column(
                       children: [
                         MyTextField(
+                          controller: _username,
                           hintText: 'username',
                           obscureText: false,
                           errMsg: "username is required",
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         MyTextField(
+                          controller: _password,
                           hintText: 'password',
                           obscureText: true,
                           errMsg: "password is required",
@@ -173,7 +190,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                  )
+                  ),
+
+                  const SizedBox(height: 15)
                 ],
               ),
             ),
