@@ -2,8 +2,13 @@ import 'package:client/component/login_options.dart';
 import 'package:client/component/my_button.dart';
 import 'package:client/component/text_field.dart';
 import 'package:client/screens/register_screen.dart';
+import 'package:client/services/service.dart';
+import 'package:client/services/user_res.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _username;
   late final TextEditingController _password;
+
+  User? _user;
 
   @override
   void initState() {
@@ -31,13 +38,27 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void signIn() {
+  void signIn() async {
+    final prefs = await SharedPreferences.getInstance();
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
+      try {
+        _user = await Service().loginUser(
+          _username.text,
+          _password.text,
+        );
+      } catch (e) {
+        print("an error occured");
+      }
+    }
+
+    if (_user != null) {
+      prefs.setString('token', _user!.token);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
       );
     }
   }

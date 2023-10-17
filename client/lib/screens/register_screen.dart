@@ -1,11 +1,12 @@
 import 'package:client/component/my_button.dart';
 import 'package:client/component/text_field.dart';
+import 'package:client/screens/home_screen.dart';
 import 'package:client/screens/login_screen.dart';
 import 'package:client/services/service.dart';
-import 'package:client/services/storage.dart';
 import 'package:client/services/user_res.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -39,37 +40,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void displayDialog(
-    BuildContext context,
-    String title,
-    String text,
-  ) =>
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(title),
-          content: Text(text),
-        ),
-      );
 
   void register() async {
+    final prefs = await SharedPreferences.getInstance();
+
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      _user = await Service().registerUser(
-        _username.text,
-        _email.text,
-        _password.text,
-      );
+      try {
+        _user = await Service().registerUser(
+          _username.text,
+          _email.text,
+          _password.text,
+        );
+      } catch (e) {
+        print("an error occured");
+      }
     }
 
     if (_user != null) {
-      SecureStorage().writeSecureData('token', _user!.token);
-    }
+      prefs.setString('token', _user!.token);
 
-    print(_user);
-    // print(_user!.token);
-    // print(_user!.msg);
-    // print(_user!.username);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    } 
   }
 
   @override

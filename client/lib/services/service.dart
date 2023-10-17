@@ -28,4 +28,26 @@ class Service {
 
     throw Exception('Cant create user.');
   }
+
+  Future<User> loginUser(
+    String username,
+    String password,
+  ) async {
+    final res = await http.post(
+      Uri.parse("http://10.0.2.2:5000/api/auth/login"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'password': password,
+      }),
+    );
+
+    if (res.statusCode == 200) {
+      return User.fromJson(jsonDecode(res.body));
+    }
+
+    throw Exception('Cant create user.');
+  }
 }
